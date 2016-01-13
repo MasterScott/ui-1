@@ -25,13 +25,14 @@ var App = React.createClass({
   render: function() {
     return <div className="main-row">
       <div className="toolbar">
-        <h2>Columbus</h2>
+        <h2 className="app-title">Columbus</h2>
         <label>Select Menu
+          <span class="arr"></span>
           <select onChange={this.handleVictimChange}>
             {this.renderVictims()}
           </select>
         </label>
-        <h2>Select Date</h2>
+        <h3>Select Date</h3>
         <RangePicker
           numberOfCalendars={1}
           selectionType="single"

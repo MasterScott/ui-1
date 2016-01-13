@@ -1,10 +1,19 @@
+body {
+  margin: 0;
+}
+
 .main-row {
   lost-utility: clearfix;
 
   div.toolbar {
+    width: 100%;
+    height: 100vh;
     lost-column: 3/12 0;
     img {
       max-width: 100%;
+    }
+    select {
+      display:block;
     }
   }
 
@@ -16,14 +25,26 @@
       height: 100%;
     }
   }
-}
-
-.main-row:first-child {
+} .main-row:first-child {
   lost-offset: -1/12 row;
 }
 
-body {
-  margin: 0;
+* {
+  font-family: -apple-system, 'Open Sans', sans-serif;
+}
+
+h2.app-title {
+  font-family: 'Megrim', -apple-system, sans-serif;
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+  background: -webkit-linear-gradient(#FF399D, #FF7EE7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+}
+
+p {
+  font-size: .75em;
 }
 
 .marker {
