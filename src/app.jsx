@@ -6,6 +6,7 @@ var GoogleMapLoader = require('react-google-maps/lib/GoogleMapLoader');
 var Marker = require('react-google-maps/lib/Marker');
 var Polyline = require('react-google-maps/lib/Polyline');
 var RangePicker = require('react-daterange-picker');
+var InfoDisplay = require('./components/info-display');
 
 var App = React.createClass({
   getInitialState: function() {
@@ -13,7 +14,8 @@ var App = React.createClass({
       locations: [],
       users: [],
       selectedUser: -1,
-      selectedDate: null
+      selectedDate: null,
+      selectedRecord: null
     };
   },
   componentWillMount: function() {
@@ -21,8 +23,8 @@ var App = React.createClass({
     this.getUserLocationData();
   },
   render: function() {
-    return <div className="row">
-      <div className="medium-6 large-4 columns">
+    return <div className="main-row">
+      <div className="toolbar">
         <h2>Columbus</h2>
         <label>Select Menu
           <select onChange={this.handleVictimChange}>
@@ -36,9 +38,11 @@ var App = React.createClass({
           minimumDate={new Date('2016-01-01T00:00:00')}
           onSelect={this.handleDateChange}
           value={this.state.selectedDate} />
+        {(this.state.selectedRecord) ? <InfoDisplay record={this.state.selectedRecord ? this.state.selectedRecord : null}/> : '' }
+
       </div>
-      <div className="medium-6 large-8 columns map-container">
-        <section className="medium-6 large-8 columns map-container">
+      <div className="map-container">
+        <section className="map-container">
           <GoogleMapLoader
             containerElement={
               <div
@@ -75,15 +79,22 @@ var App = React.createClass({
   },
   renderMarkers: function() {
     if (this.state.locations) {
-      return this.state.locations.map(function(location) {
-        return <Marker className="marker" position={location.location} key={location.daterecorded}/>
-      });
+      return this.state.locations.map(function(location, index) {
+        return <Marker className="marker"
+          position={location.location}
+          key={location.daterecorded}
+          onClick={this.handleSelectedLocationChange.bind(this, index)}/>
+      }.bind(this));
     }
   },
   renderVictims: function() {
     return this.state.users.map(function(user) {
       return <option value={user.id} key={user.id}>{user.email}</option>
     });
+  },
+  handleSelectedLocationChange: function(index, event) {
+    this.setState({selectedRecord: this.state.locations[index]});
+    console.log(this.state.selectedRecord);
   },
   handleBoundsChanged: function() {
     this.setState({
@@ -111,7 +122,6 @@ var App = React.createClass({
     var dateFormat = "YYYY-MM-DDTHH:mm:ss";
     var dateQuery = (this.state.selectedDate ? "&from_datetime=" + this.state.selectedDate.startOf("day").format(dateFormat) + "&to_datetime=" + this.state.selectedDate.endOf("day").format(dateFormat) : null);
     var queryURL = "records/get?account_id=" + this.state.selectedUser + "&bounds=" + this.state.bounds + (this.state.selectedDate ? dateQuery: '' );
-    console.log(queryURL);
     Api.get(queryURL)
       .then(function(json){
         this.setState({locations: json.data});

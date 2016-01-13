@@ -1,11 +1,29 @@
-.container {
-  height: 100%;
+.main-row {
+  lost-utility: clearfix;
+
+  div.toolbar {
+    lost-column: 3/12 0;
+    img {
+      max-width: 100%;
+    }
+  }
+
+  div.map-container {
+    margin: 0;
+    lost-column: 9/12;
+    height: 100vh;
+    section {
+      height: 100%;
+    }
+  }
 }
 
-section {
-  height: 100%;
-  width: 100%;
-  position: absolute;
+.main-row:first-child {
+  lost-offset: -1/12 row;
+}
+
+body {
+  margin: 0;
 }
 
 .marker {
