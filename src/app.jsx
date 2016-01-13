@@ -89,11 +89,12 @@ var App = React.createClass({
     this.setState({
       bounds: this.gmapComponent.getBounds().toUrlValue()
     });
-
     this.getUserLocationData();
   },
   handleVictimChange: function(event) {
     this.setState({selectedUser: parseInt(event.target.value)});
+    this.getUserLocationData();
+
   },
   handleDateChange: function(date, event) {
     this.setState({selectedDate: date});
@@ -107,7 +108,8 @@ var App = React.createClass({
       }.bind(this));
   },
   getUserLocationData: function(completion) {
-    var dateQuery = (this.state.selectedDate ? "&from_datetime=" + this.state.selectedDate.toISOString() + "&to_datetime=" + this.state.selectedDate.endOf("day").toISOString() : null);
+    var dateFormat = "YYYY-MM-DDTHH:mm:ss";
+    var dateQuery = (this.state.selectedDate ? "&from_datetime=" + this.state.selectedDate.startOf("day").format(dateFormat) + "&to_datetime=" + this.state.selectedDate.endOf("day").format(dateFormat) : null);
     var queryURL = "records/get?account_id=" + this.state.selectedUser + "&bounds=" + this.state.bounds + (this.state.selectedDate ? dateQuery: '' );
     console.log(queryURL);
     Api.get(queryURL)
