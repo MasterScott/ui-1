@@ -96,9 +96,31 @@ gulp.task('pcss', function(){
     .pipe(gulp.dest('./'));
 });
 
+
 gulp.task('default', ['build', 'serve', 'pcss', 'watch']);
+gulp.task('deploy', function(){
+  var processors = [
+    autoprefixer,
+    cssnext,
+    precss,
+    lost,
+    mqpacker
+  ];
+  gulp.src('./pcss/**/*.pcss')
+    .pipe(postcss(processors))
+    .pipe(concat('main.css'))
+    .pipe(gulp.dest('./dist'));
+
+  bundler
+    .bundle()
+    .pipe(source('main.js'))
+    .pipe(gulp.dest('./dist'))
+
+  gulp.src('*.html')
+    .pipe(gulp.dest('./dist'))
+
+});
 
 gulp.task('watch', function () {
   gulp.watch('./pcss/**/*.pcss', ['pcss']);
-  // gulp.watch('./sass/**/*.scss', ['sass']);
 });
