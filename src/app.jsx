@@ -5,20 +5,37 @@ var GoogleMap = require('react-google-maps/lib/GoogleMap');
 var GoogleMapLoader = require('react-google-maps/lib/GoogleMapLoader');
 var Marker = require('react-google-maps/lib/Marker');
 var Polyline = require('react-google-maps/lib/Polyline');
+var RangePicker = require('react-daterange-picker');
 
 var App = React.createClass({
   getInitialState: function() {
     return {
-      locations: []
+      locations: [],
+      users: [],
+      selectedUser: -1,
+      selectedDate: null
     };
   },
   componentWillMount: function() {
+    this.getUsers();
     this.getUserLocationData();
   },
   render: function() {
     return <div className="row">
       <div className="medium-6 large-4 columns">
         <h2>Columbus</h2>
+        <label>Select Menu
+          <select onChange={this.handleVictimChange}>
+            {this.renderVictims()}
+          </select>
+        </label>
+        <h2>Select Date</h2>
+        <RangePicker
+          numberOfCalendars={1}
+          selectionType="single"
+          minimumDate={new Date('2016-01-01T00:00:00')}
+          onSelect={this.handleDateChange}
+          value={this.state.selectedDate} />
       </div>
       <div className="medium-6 large-8 columns map-container">
         <section className="medium-6 large-8 columns map-container">
@@ -63,6 +80,11 @@ var App = React.createClass({
       });
     }
   },
+  renderVictims: function() {
+    return this.state.users.map(function(user) {
+      return <option value={user.id} key={user.id}>{user.email}</option>
+    });
+  },
   handleBoundsChanged: function() {
     this.setState({
       bounds: this.gmapComponent.getBounds().toUrlValue()
@@ -70,8 +92,24 @@ var App = React.createClass({
 
     this.getUserLocationData();
   },
-  getUserLocationData: function() {
-    var queryURL = "records/get?account_id=" + 12 + "&bounds=" + this.state.bounds;
+  handleVictimChange: function(event) {
+    this.setState({selectedUser: parseInt(event.target.value)});
+  },
+  handleDateChange: function(date, event) {
+    this.setState({selectedDate: date});
+    this.getUserLocationData();
+  },
+  getUsers: function() {
+    Api.get('users/get')
+      .then(function(json) {
+        console.log(json);
+        this.setState({users: json.data, selectedUser: json.data[0].id});
+      }.bind(this));
+  },
+  getUserLocationData: function(completion) {
+    var dateQuery = (this.state.selectedDate ? "&from_datetime=" + this.state.selectedDate.toISOString() + "&to_datetime=" + this.state.selectedDate.endOf("day").toISOString() : null);
+    var queryURL = "records/get?account_id=" + this.state.selectedUser + "&bounds=" + this.state.bounds + (this.state.selectedDate ? dateQuery: '' );
+    console.log(queryURL);
     Api.get(queryURL)
       .then(function(json){
         this.setState({locations: json.data});

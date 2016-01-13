@@ -23,6 +23,7 @@
     "node-notifier": "^4.4.0",
     "precss": "^1.4.0",
     "react": "^0.14.6",
+    "react-daterange-picker": "^1.0.0",
     "react-dom": "^0.14.6",
     "react-google-maps": "^4.7.2",
     "reactify": "^1.1.1",
