@@ -3,12 +3,12 @@ var gutil = require('gulp-util');
 var source = require('vinyl-source-stream');
 var browserify = require('browserify');
 var watchify = require('watchify');
-var reactify = require('reactify');
 var notifier = require('node-notifier');
 var server = require('gulp-server-livereload');
 var concat = require('gulp-concat');
 var watch = require('gulp-watch');
 var postcss = require('gulp-postcss');
+var babelify = require('babelify');
 
 // PostCSS processors
 var autoprefixer = require('autoprefixer');
@@ -41,7 +41,9 @@ var notify = function(error) {
 
 var bundler = watchify(browserify({
   entries: ['./src/app.jsx'],
-  transform: [reactify],
+  transform: babelify.configure({
+              presets: ["es2015", "react"]
+            }),
   extensions: ['.jsx'],
   debug: true,
   cache: {},

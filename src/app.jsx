@@ -26,12 +26,12 @@ var App = React.createClass({
     return <div className="main-row">
       <div className="toolbar">
         <h2 className="app-title">Columbus</h2>
-        <label>Select Menu
-          <span class="arr"></span>
+        <h3>Select Menu</h3>
+        <div>
           <select onChange={this.handleVictimChange}>
             {this.renderVictims()}
           </select>
-        </label>
+        </div>
         <h3>Select Date</h3>
         <RangePicker
           numberOfCalendars={1}
@@ -95,7 +95,6 @@ var App = React.createClass({
   },
   handleSelectedLocationChange: function(index, event) {
     this.setState({selectedRecord: this.state.locations[index]});
-    console.log(this.state.selectedRecord);
   },
   handleBoundsChanged: function() {
     this.setState({
