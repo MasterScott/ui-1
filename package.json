@@ -24,6 +24,7 @@
     "gulp-watch": "^4.3.5",
     "lost": "^6.6.3",
     "node-notifier": "^4.4.0",
+    "postcss-cssnext": "^2.4.0",
     "precss": "^1.4.0",
     "react": "^0.14.6",
     "react-daterange-picker": "^1.0.0",
