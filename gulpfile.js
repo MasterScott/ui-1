@@ -9,6 +9,8 @@ var concat = require('gulp-concat');
 var watch = require('gulp-watch');
 var postcss = require('gulp-postcss');
 var babelify = require('babelify');
+var streamify = require('gulp-streamify');
+var uglify = require('gulp-uglify');
 
 // PostCSS processors
 var autoprefixer = require('autoprefixer');
@@ -99,6 +101,18 @@ gulp.task('pcss', function(){
 
 gulp.task('default', ['build', 'serve', 'pcss', 'watch']);
 gulp.task('deploy', function(){
+  var bundler = browserify({
+    entries: ['./src/app.jsx'],
+    transform: babelify.configure({
+                presets: ["es2015", "react"]
+              }),
+    extensions: ['.jsx'],
+    debug: false,
+    cache: {},
+    packageCache: {},
+    fullPaths: true
+  });
+
   var processors = [
     autoprefixer,
     cssnext,
@@ -114,6 +128,7 @@ gulp.task('deploy', function(){
   bundler
     .bundle()
     .pipe(source('main.js'))
+    .pipe(streamify(uglify()))
     .pipe(gulp.dest('./dist'))
 
   gulp.src('*.html')
