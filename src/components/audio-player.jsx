@@ -2,7 +2,7 @@ var React = require('react');
 
 module.exports = React.createClass({
   componentWillReceiveProps: function(nextProps) {
-    // this.props = {audio_url: ''}
+    if (nextProps.audio_url === this.props.audio_url) return;
     setTimeout(() => {
       this.aPlayer.load();
       this.aPlayer.play();
