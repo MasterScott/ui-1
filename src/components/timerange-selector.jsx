@@ -1,13 +1,37 @@
 var React = require('react');
+var moment = require('moment');
 var TimePicker = require('react-time-picker/lib');
 
-var defaultStartValue = '00:00'
-var defaultEndValue = '23:59'
-
 module.exports = React.createClass({
+  getInitialState: function() {
+    console.log(this.props.fromTime);
+    return {
+      startValue: this.props.fromTime,
+      endValue: this.props.toTime
+    };
+  },
   render: function() {
     return <div>
-      Time range selector
+      <h4>From Time:</h4>
+      <TimePicker
+        value={this.state.startValue}
+        onChange={this.handleStartTimeChange}/>
+      <h4>To Time:</h4>
+      <TimePicker
+        value={this.state.endValue}
+        onChange={this.handleEndTimeChange}/>
     </div>
+  },
+  handleStartTimeChange: function(value, moment) {
+    this.setState({startValue: moment}, this.updateSelectedTimeRange);
+  },
+  handleEndTimeChange: function(value, moment) {
+    this.setState({endValue: moment}, this.updateSelectedTimeRange);
+  },
+  updateSelectedTimeRange: function() {
+    this.props.onValueChanged({
+      selectedFromTime: this.state.startValue,
+      selectedToTime: this.state.endValue
+    });
   }
 })

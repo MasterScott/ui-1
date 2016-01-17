@@ -115,18 +115,19 @@ var App = React.createClass({
   getUsers: function() {
     Api.get('users/get')
       .then(function(json) {
-        console.log(json);
         this.setState({users: json.data, selectedUser: json.data[0].id});
       }.bind(this));
   },
   getUserLocationData: function() {
     var dateFormat = "YYYY-MM-DDTHH:mm:ss";
-    var dateQuery = (this.state.selectedFromDate && this.state.selectedToDate ? "&from_datetime=" + this.state.selectedFromDate.format(dateFormat) + "&to_datetime=" + this.state.selectedToDate.format(dateFormat) : null);
+    var dateQuery = (this.state.selectedFromDate && this.state.selectedToDate ? "&from_datetime=" + this.state.selectedFromDate.utc().format(dateFormat) + "&to_datetime=" + this.state.selectedToDate.utc().format(dateFormat) : null);
     var queryURL = "records/get?account_id=" + this.state.selectedUser + "&bounds=" + this.state.bounds + (dateQuery ? dateQuery: '' );
-    Api.get(queryURL)
-      .then(function(json){
-        this.setState({locations: json.data});
-      }.bind(this));
+    if (this.state.selectedFromDate && this.state.selectedToDate) {
+      Api.get(queryURL)
+        .then(function(json){
+          this.setState({locations: json.data});
+        }.bind(this));
+    }
   }
 })
 
