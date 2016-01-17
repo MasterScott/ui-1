@@ -5,7 +5,8 @@ var GoogleMap = require('react-google-maps/lib/GoogleMap');
 var GoogleMapLoader = require('react-google-maps/lib/GoogleMapLoader');
 var Marker = require('react-google-maps/lib/Marker');
 var Polyline = require('react-google-maps/lib/Polyline');
-var RangePicker = require('react-daterange-picker');
+// var RangePicker = require('react-daterange-picker');
+var DateTimeRangePicker = require('./components/datetimerange-selector');
 var InfoDisplay = require('./components/info-display');
 
 var App = React.createClass({
@@ -14,7 +15,8 @@ var App = React.createClass({
       locations: [],
       users: [],
       selectedUser: -1,
-      selectedDate: null,
+      selectedFromDate: null,
+      selectedToDate: null,
       selectedRecord: null
     };
   },
@@ -34,12 +36,11 @@ var App = React.createClass({
           </select>
         </div>
         <h3>Select Date</h3>
-        <RangePicker
+
+        <DateTimeRangePicker
           numberOfCalendars={1}
           selectionType="single"
-          minimumDate={new Date('2016-01-01T00:00:00')}
-          onSelect={this.handleDateChange}
-          value={this.state.selectedDate} />
+          onValueChanged={this.handleDateChange} />
         {(this.state.selectedRecord) ? <InfoDisplay {...selectedRecord} /> : '' }
 
       </div>
@@ -106,11 +107,10 @@ var App = React.createClass({
   handleVictimChange: function(event) {
     this.setState({selectedUser: parseInt(event.target.value)});
     this.getUserLocationData();
-
   },
-  handleDateChange: function(date, event) {
-    this.setState({selectedDate: date});
-    this.getUserLocationData();
+  handleDateChange: function(selectedDates, event) {
+    this.setState({selectedFromDate: selectedDates.fromDateTime, selectedToDate: selectedDates.toDateTime},
+      this.getUserLocationData)
   },
   getUsers: function() {
     Api.get('users/get')
@@ -119,10 +119,10 @@ var App = React.createClass({
         this.setState({users: json.data, selectedUser: json.data[0].id});
       }.bind(this));
   },
-  getUserLocationData: function(completion) {
+  getUserLocationData: function() {
     var dateFormat = "YYYY-MM-DDTHH:mm:ss";
-    var dateQuery = (this.state.selectedDate ? "&from_datetime=" + this.state.selectedDate.startOf("day").format(dateFormat) + "&to_datetime=" + this.state.selectedDate.endOf("day").format(dateFormat) : null);
-    var queryURL = "records/get?account_id=" + this.state.selectedUser + "&bounds=" + this.state.bounds + (this.state.selectedDate ? dateQuery: '' );
+    var dateQuery = (this.state.selectedFromDate && this.state.selectedToDate ? "&from_datetime=" + this.state.selectedFromDate.format(dateFormat) + "&to_datetime=" + this.state.selectedToDate.format(dateFormat) : null);
+    var queryURL = "records/get?account_id=" + this.state.selectedUser + "&bounds=" + this.state.bounds + (dateQuery ? dateQuery: '' );
     Api.get(queryURL)
       .then(function(json){
         this.setState({locations: json.data});

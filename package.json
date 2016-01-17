@@ -31,6 +31,7 @@
     "react": "^0.14.6",
     "react-daterange-picker": "^1.0.0",
     "react-google-maps": "^4.7.2",
+    "react-time-picker": "^1.1.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.6.1",
     "whatwg-fetch": "^0.10.1"
