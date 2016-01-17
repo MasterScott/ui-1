@@ -23,10 +23,11 @@ var App = React.createClass({
     this.getUserLocationData();
   },
   render: function() {
+    var selectedRecord = (this.state.selectedRecord ? this.state.selectedRecord : null);
     return <div className="main-row">
       <div className="toolbar">
         <h2 className="app-title">Columbus</h2>
-        <h3>Select Menu</h3>
+        <h3>Select Victim</h3>
         <div>
           <select onChange={this.handleVictimChange}>
             {this.renderVictims()}
@@ -39,7 +40,7 @@ var App = React.createClass({
           minimumDate={new Date('2016-01-01T00:00:00')}
           onSelect={this.handleDateChange}
           value={this.state.selectedDate} />
-        {(this.state.selectedRecord) ? <InfoDisplay record={this.state.selectedRecord ? this.state.selectedRecord : null}/> : '' }
+        {(this.state.selectedRecord) ? <InfoDisplay {...selectedRecord} /> : '' }
 
       </div>
       <div className="map-container">
