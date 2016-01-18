@@ -1,6 +1,6 @@
-var Fetch = require('whatwg-fetch');
-var rootUrl = "https://lab.jurvis.co/columbus/api/"
-var config = require('../../config.json')
+import Fetch from 'whatwg-fetch';
+import config from '../../config.json'
+let rootUrl = "https://lab.jurvis.co/columbus/api/"
 
 module.exports = {
   get: function(url) {

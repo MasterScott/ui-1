@@ -5,7 +5,6 @@ var GoogleMap = require('react-google-maps/lib/GoogleMap');
 var GoogleMapLoader = require('react-google-maps/lib/GoogleMapLoader');
 var Marker = require('react-google-maps/lib/Marker');
 var Polyline = require('react-google-maps/lib/Polyline');
-// var RangePicker = require('react-daterange-picker');
 var DateTimeRangePicker = require('./components/datetimerange-selector');
 var InfoDisplay = require('./components/info-display');
 
