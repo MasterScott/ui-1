@@ -1,12 +1,9 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Api = require('./utils/api');
-var GoogleMap = require('react-google-maps/lib/GoogleMap');
-var GoogleMapLoader = require('react-google-maps/lib/GoogleMapLoader');
-var Marker = require('react-google-maps/lib/Marker');
-var Polyline = require('react-google-maps/lib/Polyline');
-var DateTimeRangePicker = require('./components/datetimerange-selector');
-var InfoDisplay = require('./components/info-display');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {GoogleMap, GoogleMapLoader, Marker, Polyline, InfoWindow} from 'react-google-maps';
+import DateTimeRangePicker from './components/datetimerange-selector';
+import InfoDisplay from './components/info-display';
+import Api from './utils/api';
 
 var App = React.createClass({
   getInitialState: function() {
@@ -24,23 +21,21 @@ var App = React.createClass({
     this.getUserLocationData();
   },
   render: function() {
-    var selectedRecord = (this.state.selectedRecord ? this.state.selectedRecord : null);
     return <div className="main-row">
       <div className="toolbar">
         <h2 className="app-title">Columbus</h2>
-        <h3>Select Victim</h3>
+        <h4>Select Victim</h4>
         <div>
           <select onChange={this.handleVictimChange}>
             {this.renderVictims()}
           </select>
         </div>
-        <h3>Select Date</h3>
+        <h4>Select Date</h4>
 
         <DateTimeRangePicker
           numberOfCalendars={1}
           selectionType="single"
           onValueChanged={this.handleDateChange} />
-        {(this.state.selectedRecord) ? <InfoDisplay {...selectedRecord} /> : '' }
 
       </div>
       <div className="map-container">
@@ -85,7 +80,16 @@ var App = React.createClass({
         return <Marker className="marker"
           position={location.location}
           key={location.daterecorded}
-          onClick={this.handleSelectedLocationChange.bind(this, index)}/>
+          onClick={this.handleSelectedLocationChange.bind(this, index)}>
+
+          {this.state.selectedRecord && this.state.selectedRecord === location ?
+            <InfoWindow onCloseclick={(e) => {this.setState({selectedRecord: null})}} options={{maxWidth: 250}}>
+              <InfoDisplay {...location}></InfoDisplay>
+            </InfoWindow>
+            : null
+          }
+
+        </Marker>
       }.bind(this));
     }
   },
@@ -100,12 +104,10 @@ var App = React.createClass({
   handleBoundsChanged: function() {
     this.setState({
       bounds: this.gmapComponent.getBounds().toUrlValue()
-    });
-    this.getUserLocationData();
+    }, this.getUserLocationData);
   },
   handleVictimChange: function(event) {
-    this.setState({selectedUser: parseInt(event.target.value)});
-    this.getUserLocationData();
+    this.setState({selectedUser: parseInt(event.target.value)}, this.getUserLocationData);
   },
   handleDateChange: function(selectedDates, event) {
     this.setState({selectedFromDate: selectedDates.fromDateTime, selectedToDate: selectedDates.toDateTime},

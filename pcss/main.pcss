@@ -6,9 +6,11 @@ body {
   lost-utility: clearfix;
 
   div.toolbar {
+    padding-top: 0.5em 0em 0.5em 0;
     width: 100%;
     height: 100vh;
     lost-column: 3/12 0;
+    overflow-y: scroll;
     img, audio {
       max-width: 100%;
     } audio {
@@ -16,6 +18,18 @@ body {
     }
     select {
       display:block;
+    }
+
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  div.info-display {
+    width: 250px;
+    img, audio {
+      max-width: 100%;
     }
   }
 

@@ -4,7 +4,7 @@ import moment from 'moment';
 
 const InfoDisplay = (props) => {
   return (
-    <div>
+    <div className='info-display'>
      <h3>Record Details</h3>
      <p>Date/Time Recorded: {moment(props.daterecorded).format("YYYY-MM-DD HH:mm")}</p>
      <img src={props.image_url} />
