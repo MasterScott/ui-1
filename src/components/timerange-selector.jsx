@@ -17,11 +17,11 @@ class TimeRangeSelector extends Component {
         <h4>From Time:</h4>
         <TimePicker
           value={this.state.startValue}
-          onChange={(value, event) => {this.setState({startValue: moment}, this.updateSelectedTimeRange)}}/>
+          onChange={(value, moment) => {this.setState({startValue: moment}, this.updateSelectedTimeRange)}}/>
         <h4>To Time:</h4>
         <TimePicker
           value={this.state.endValue}
-          onChange={(value, event) => {this.setState({endValue: moment}, this.updateSelectedTimeRange)}}/>
+          onChange={(value, moment) => {this.setState({endValue: moment}, this.updateSelectedTimeRange)}}/>
       </div>
     );
   }
@@ -29,7 +29,7 @@ class TimeRangeSelector extends Component {
   updateSelectedTimeRange() {
     this.props.onValueChanged({
       selectedFromTime: this.state.startValue,
-      seletedToTime: this.state.endValue
+      selectedToTime: this.state.endValue
     });
   }
 }

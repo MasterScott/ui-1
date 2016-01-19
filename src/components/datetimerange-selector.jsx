@@ -26,12 +26,13 @@ class DateTimeRangeSelector extends Component {
         <TimePicker
           fromTime = {this.state.fromTime}
           toTime = {this.state.toTime}
-          onValueChanged={this.handleTimeChange}/>
+          onValueChanged={this.handleTimeChange.bind(this)}/>
       </div>
     );
   }
 
   handleTimeChange(times) {
+    console.log(times);
     this.setState({
       fromTime: times.selectedFromTime,
       toTime: times.selectedToTime
@@ -39,6 +40,7 @@ class DateTimeRangeSelector extends Component {
   }
 
   updateDateTime() {
+    console.log(this.state);
     this.props.onValueChanged({
       fromDateTime: moment(this.state.selectedDate).hour(this.state.fromTime.hour()).minute(this.state.fromTime.minute()),
       toDateTime: moment(this.state.selectedDate).hour(this.state.toTime.hour()).minute(this.state.toTime.minute())

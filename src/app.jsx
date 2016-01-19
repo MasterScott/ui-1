@@ -107,7 +107,7 @@ var App = React.createClass({
   handleVictimChange: function(event) {
     this.setState({selectedUser: parseInt(event.target.value)}, this.getUserLocationData);
   },
-  handleDateChange: function(selectedDates, event) {
+  handleDateChange: function(selectedDates) {
     this.setState({selectedFromDate: selectedDates.fromDateTime, selectedToDate: selectedDates.toDateTime},
       this.getUserLocationData)
   },
