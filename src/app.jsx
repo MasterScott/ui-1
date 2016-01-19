@@ -31,12 +31,10 @@ var App = React.createClass({
           </select>
         </div>
         <h4>Select Date</h4>
-
         <DateTimeRangePicker
           numberOfCalendars={1}
           selectionType="single"
           onValueChanged={this.handleDateChange} />
-
       </div>
       <div className="map-container">
         <section className="map-container">
